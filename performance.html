@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Performance Live — armiamaforex</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #080c10;
+      --bg2:       #0d1218;
+      --bg3:       #111820;
+      --border:    rgba(255,255,255,0.07);
+      --accent:    #00e5a0;
+      --accent2:   #00b4d8;
+      --red:       #ff4d6d;
+      --text:      #e8edf2;
+      --muted:     #5a6878;
+      --card:      rgba(255,255,255,0.03);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── TICKER ── */
+    .ticker-wrap {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .ticker-track {
+      display: flex;
+      gap: 48px;
+      animation: ticker 30s linear infinite;
+      white-space: nowrap;
+      width: max-content;
+    }
+    .ticker-item {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+    .ticker-item span { color: var(--accent); margin-left: 6px; }
+    .ticker-item .dn { color: var(--red); }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .nav-logo em { color: var(--accent); font-style: normal; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: color .2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .nav-cta {
+      background: var(--accent);
+      color: var(--bg);
+      padding: 10px 22px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity .2s;
+    }
+    .nav-cta:hover { opacity: .85; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 72px 48px 48px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-left { flex: 1; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,229,160,0.1);
+      border: 1px solid rgba(0,229,160,0.25);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .dot-live {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.4)} }
+    .hero h1 {
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 16px;
+    }
+    .hero h1 em { color: var(--accent); font-style: normal; }
+    .hero-sub {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 480px;
+      margin-bottom: 32px;
+    }
+    .hero-verified {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .hero-verified svg { color: var(--accent); }
+    .hero-right {
+      flex-shrink: 0;
+      width: 280px;
+    }
+
+    /* ── ACCOUNT CARD ── */
+    .account-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .account-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .account-card-header .label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .myfxbook-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0,180,216,0.12);
+      border: 1px solid rgba(0,180,216,0.3);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent2);
+      letter-spacing: 0.05em;
+    }
+    .account-metric { margin-bottom: 16px; }
+    .account-metric .m-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 4px;
+      font-family: 'Space Mono', monospace;
+    }
+    .account-metric .m-val {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--accent);
+      font-family: 'Space Mono', monospace;
+    }
+    .account-metric .m-val.red { color: var(--red); }
+    .account-divider { height: 1px; background: var(--border); margin: 16px 0; }
+    .account-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-family: 'Space Mono', monospace;
+      margin-bottom: 10px;
+    }
+    .account-row .r-label { color: var(--muted); }
+    .account-row .r-val { color: var(--text); font-weight: 700; }
+    .account-row .r-val.green { color: var(--accent); }
+    .account-row .r-val.red { color: var(--red); }
+
+    /* ── STATS GRID ── */
+    .stats-section { padding: 56px 48px; }
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .2s, transform .2s;
+    }
+    .stat-card:hover { border-color: rgba(0,229,160,0.3); transform: translateY(-2px); }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .stat-card:hover::before { opacity: 1; }
+    .stat-card .s-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .stat-card .s-val {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      font-family: 'Space Mono', monospace;
+    }
+    .stat-card .s-val.green { color: var(--accent); }
+    .stat-card .s-val.red { color: var(--red); }
+    .stat-card .s-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* ── CHART EMBED ── */
+    .chart-section {
+      padding: 0 48px 56px;
+    }
+    .chart-container {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .chart-title { font-size: 14px; font-weight: 700; }
+    .chart-tabs { display: flex; gap: 4px; }
+    .chart-tab {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Space Mono', monospace;
+      cursor: pointer;
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid transparent;
+      transition: all .15s;
+    }
+    .chart-tab.active {
+      color: var(--accent);
+      background: rgba(0,229,160,0.08);
+      border-color: rgba(0,229,160,0.25);
+    }
+
+    /* MyFXBook embed area */
+    .myfxbook-embed {
+      padding: 24px;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+    }
+    /* When MyFXBook is NOT yet connected, show setup card */
+    .setup-card {
+      width: 100%;
+      max-width: 560px;
+      background: rgba(0,229,160,0.04);
+      border: 1px dashed rgba(0,229,160,0.3);
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+    }
+    .setup-icon { font-size: 48px; margin-bottom: 16px; }
+    .setup-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+    .setup-card p { color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
+    .setup-steps {
+      text-align: left;
+      margin-bottom: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .setup-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 13px;
+    }
+    .step-num {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: rgba(0,229,160,0.15);
+      border: 1px solid rgba(0,229,160,0.4);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-family: 'Space Mono', monospace;
+    }
+    .step-text { color: var(--muted); line-height: 1.5; }
+    .step-text strong { color: var(--text); }
+    .btn-myfxbook {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: var(--bg);
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity .2s;
+    }
+    .btn-myfxbook:hover { opacity: .85; }
+
+    /* Actual embed iframe container (shown when ID is set) */
+    .embed-live { width: 100%; display: none; }
+    .embed-live iframe { width: 100%; border: none; }
+
+    /* ── TRADES TABLE ── */
+    .trades-section { padding: 0 48px 56px; }
+    .trades-container {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .trades-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .trades-header h3 { font-size: 14px; font-weight: 700; }
+    .trades-placeholder {
+      padding: 48px 24px;
+      text-align: center;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+    }
+    .trades-table { width: 100%; border-collapse: collapse; }
+    .trades-table th {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: left;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+    }
+    .trades-table td {
+      padding: 14px 20px;
+      font-size: 13px;
+      font-family: 'Space Mono', monospace;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .trades-table tr:last-child td { border-bottom: none; }
+    .td-pair { font-weight: 700; color: var(--text); }
+    .td-buy { color: var(--accent); font-weight: 700; }
+    .td-sell { color: var(--red); font-weight: 700; }
+    .td-pos { color: var(--accent); }
+    .td-neg { color: var(--red); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-left { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .footer-left a { color: var(--accent2); text-decoration: none; }
+    .footer-disclaimer {
+      font-size: 11px;
+      color: var(--muted);
+      max-width: 500px;
+      line-height: 1.6;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      .hero { flex-direction: column; padding: 40px 20px 32px; }
+      .hero-right { width: 100%; }
+      .stats-section, .chart-section, .trades-section { padding-left: 20px; padding-right: 20px; }
+      footer { padding: 24px 20px; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="ticker">
+    <span class="ticker-item">EUR/USD <span>1.0842 ▲ +0.23%</span></span>
+    <span class="ticker-item">GBP/USD <span>1.2631 ▲ +0.11%</span></span>
+    <span class="ticker-item">USD/JPY <span class="dn">149.82 ▼ -0.08%</span></span>
+    <span class="ticker-item">XAU/USD <span>2318.40 ▲ +0.45%</span></span>
+    <span class="ticker-item">BTC/USD <span>64,200 ▲ +1.2%</span></span>
+    <span class="ticker-item">USD/CHF <span class="dn">0.9041 ▼ -0.06%</span></span>
+    <span class="ticker-item">AUD/USD <span>0.6487 ▲ +0.17%</span></span>
+    <span class="ticker-item">NZD/USD <span class="dn">0.5994 ▼ -0.03%</span></span>
+    <!-- duplicated for seamless loop -->
+    <span class="ticker-item">EUR/USD <span>1.0842 ▲ +0.23%</span></span>
+    <span class="ticker-item">GBP/USD <span>1.2631 ▲ +0.11%</span></span>
+    <span class="ticker-item">USD/JPY <span class="dn">149.82 ▼ -0.08%</span></span>
+    <span class="ticker-item">XAU/USD <span>2318.40 ▲ +0.45%</span></span>
+    <span class="ticker-item">BTC/USD <span>64,200 ▲ +1.2%</span></span>
+    <span class="ticker-item">USD/CHF <span class="dn">0.9041 ▼ -0.06%</span></span>
+    <span class="ticker-item">AUD/USD <span>0.6487 ▲ +0.17%</span></span>
+    <span class="ticker-item">NZD/USD <span class="dn">0.5994 ▼ -0.03%</span></span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="https://armiamaforex.github.io/armiamaforex/" class="nav-logo">armia<em>maforex</em></a>
+  <ul class="nav-links">
+    <li><a href="https://armiamaforex.github.io/armiamaforex/#about">Chi sono</a></li>
+    <li><a href="https://armiamaforex.github.io/armiamaforex/#argomenti">Argomenti</a></li>
+    <li><a href="#" class="active">Performance</a></li>
+  </ul>
+  <a href="https://www.tiktok.com/@armiamaforex" class="nav-cta" target="_blank">Seguimi →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge">
+      <span class="dot-live"></span>
+      Conto reale verificato
+    </div>
+    <h1>Risultati <em>reali.</em><br>Niente fuffa.</h1>
+    <p class="hero-sub">
+      Queste sono le statistiche live del mio conto reale, verificate e pubblicate da MyFXBook.
+      Nessuna modifica, nessun cherry-picking — solo trading autentico.
+    </p>
+    <div class="hero-verified">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.745 3.745 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.745 3.745 0 011.043 3.296A3.745 3.745 0 0121 12z"/>
+      </svg>
+      Dati verificati e aggiornati automaticamente da MyFXBook
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="account-card">
+      <div class="account-card-header">
+        <span class="label">Account Summary</span>
+        <span class="myfxbook-badge">● MyFXBook</span>
+      </div>
+      <div class="account-metric">
+        <div class="m-label">GAIN TOTALE</div>
+        <!-- ⬇ sostituisci con il valore reale da MyFXBook -->
+        <div class="m-val" id="gain-total">+--.--%</div>
+      </div>
+      <div class="account-divider"></div>
+      <div class="account-row">
+        <span class="r-label">Drawdown max</span>
+        <span class="r-val red" id="max-dd">--.-- %</span>
+      </div>
+      <div class="account-row">
+        <span class="r-label">Win Rate</span>
+        <span class="r-val green" id="win-rate">-- %</span>
+      </div>
+      <div class="account-row">
+        <span class="r-label">Trade totali</span>
+        <span class="r-val" id="total-trades">---</span>
+      </div>
+      <div class="account-row">
+        <span class="r-label">Profit Factor</span>
+        <span class="r-val green" id="profit-factor">-.-</span>
+      </div>
+      <div class="account-row">
+        <span class="r-label">Attivo dal</span>
+        <span class="r-val" id="started-date">--/--/----</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS GRID -->
+<section class="stats-section">
+  <div class="section-title">Statistiche dettagliate</div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="s-label">Gain %</div>
+      <div class="s-val green" id="s-gain">+--.--%</div>
+      <div class="s-sub">dalla apertura conto</div>
+    </div>
+    <div class="stat-card">
+      <div class="s-label">Drawdown Max</div>
+      <div class="s-val red" id="s-dd">--.-- %</div>
+      <div class="s-sub">massimo drawdown storico</div>
+    </div>
+    <div class="stat-card">
+      <div class="s-label">Win Rate</div>
+      <div class="s-val green" id="s-wr">-- %</div>
+      <div class="s-sub">trade vincenti / totali</div>
+    </div>
+    <div class="stat-card">
+      <div class="s-label">Profit Factor</div>
+      <div class="s-val green" id="s-pf">-.-</div>
+      <div class="s-sub">gross profit / gross loss</div>
+    </div>
+    <div class="stat-card">
+      <div class="s-label">Trades Totali</div>
+      <div class="s-val" id="s-trades">---</div>
+      <div class="s-sub">trades eseguiti</div>
+    </div>
+    <div class="stat-card">
+      <div class="s-label">Lotti Totali</div>
+      <div class="s-val" id="s-lots">--.--</div>
+      <div class="s-sub">volume complessivo</div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUITY CHART (MyFXBook embed) -->
+<section class="chart-section">
+  <div class="chart-container">
+    <div class="chart-header">
+      <span class="chart-title">Equity Curve</span>
+      <div class="chart-tabs">
+        <button class="chart-tab active" onclick="setTab(this,'growth')">Growth</button>
+        <button class="chart-tab" onclick="setTab(this,'balance')">Balance</button>
+      </div>
+    </div>
+
+    <div class="myfxbook-embed" id="embed-area">
+
+      <!-- ── SETUP CARD (visibile finché non hai l'ID MyFXBook) ── -->
+      <div class="setup-card" id="setup-card">
+        <div class="setup-icon">📊</div>
+        <h3>Connetti MyFXBook</h3>
+        <p>Per mostrare il grafico live del tuo conto reale, segui questi passaggi:</p>
+        <div class="setup-steps">
+          <div class="setup-step">
+            <span class="step-num">1</span>
+            <span class="step-text">Registrati su <strong>myfxbook.com</strong> e vai su <strong>Dashboard → Add Account</strong></span>
+          </div>
+          <div class="setup-step">
+            <span class="step-num">2</span>
+            <span class="step-text">Inserisci il numero conto MT5, la <strong>password investor</strong> (read-only) e il server XM</span>
+          </div>
+          <div class="setup-step">
+            <span class="step-num">3</span>
+            <span class="step-text">Una volta verificato ottieni il tuo <strong>Account ID</strong> (es. <code style="color:var(--accent)">123456</code>)</span>
+          </div>
+          <div class="setup-step">
+            <span class="step-num">4</span>
+            <span class="step-text">Inseriscilo nel campo qui sotto — il grafico si attiva automaticamente</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;">
+          <input id="myfxbook-id-input" type="text" placeholder="Il tuo MyFXBook Account ID..."
+            style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:12px 16px;border-radius:8px;font-family:'Space Mono',monospace;font-size:13px;outline:none;width:240px;" />
+          <button onclick="activateEmbed()" style="background:var(--accent);color:var(--bg);padding:12px 20px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;">Attiva</button>
+        </div>
+        <a href="https://www.myfxbook.com" target="_blank" class="btn-myfxbook">
+          🔗 Apri MyFXBook
+        </a>
+      </div>
+
+      <!-- ── LIVE EMBED (nascosto finché non si attiva) ── -->
+      <div class="embed-live" id="embed-live">
+        <iframe id="myfxbook-iframe" src="" height="420" scrolling="no"></iframe>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TRADE HISTORY -->
+<section class="trades-section">
+  <div class="trades-container">
+    <div class="trades-header">
+      <h3>Ultimi Trade</h3>
+      <span style="font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;">Aggiornato da MyFXBook</span>
+    </div>
+    <div class="trades-placeholder" id="trades-placeholder">
+      Connetti MyFXBook per vedere lo storico dei trade in tempo reale.
+    </div>
+    <table class="trades-table" id="trades-table" style="display:none;">
+      <thead>
+        <tr>
+          <th>Coppia</th>
+          <th>Direzione</th>
+          <th>Lotti</th>
+          <th>Aperto</th>
+          <th>Chiuso</th>
+          <th>P&L</th>
+          <th>Pips</th>
+        </tr>
+      </thead>
+      <tbody id="trades-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <strong>armiamaforex</strong> · Performance verificata da <a href="https://www.myfxbook.com" target="_blank">MyFXBook</a><br>
+    © 2026 armiamaforex · Tutti i diritti riservati
+  </div>
+  <div class="footer-disclaimer">
+    I risultati passati non garantiscono risultati futuri. Il trading comporta rischi significativi di perdita del capitale. Questi dati sono pubblicati a scopo puramente informativo e non costituiscono consulenza finanziaria.
+  </div>
+</footer>
+
+<script>
+  /* ── TAB SWITCH ── */
+  function setTab(btn, type) {
+    document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    const id = window._myfxbookId;
+    if (id) loadEmbed(id, type);
+  }
+
+  /* ── ACTIVATE EMBED ── */
+  function activateEmbed() {
+    const id = document.getElementById('myfxbook-id-input').value.trim();
+    if (!id) { alert('Inserisci il tuo MyFXBook Account ID'); return; }
+    window._myfxbookId = id;
+    loadEmbed(id, 'growth');
+    document.getElementById('setup-card').style.display = 'none';
+    document.getElementById('embed-live').style.display = 'block';
+    document.getElementById('trades-placeholder').style.display = 'none';
+    document.getElementById('trades-table').style.display = 'table';
+    fetchStats(id);
+  }
+
+  function loadEmbed(id, type) {
+    const iframe = document.getElementById('myfxbook-iframe');
+    // MyFXBook public widget URL
+    iframe.src = `https://widgets.myfxbook.com/api/get-widget.php?id=${id}&type=${type === 'balance' ? 2 : 1}&width=900&height=400&bg=080c10&title=0`;
+  }
+
+  /* ── FETCH STATS VIA MYFXBOOK API ── */
+  async function fetchStats(id) {
+    try {
+      // MyFXBook public API — no auth needed for public accounts
+      const res = await fetch(`https://www.myfxbook.com/api/get-my-accounts.json?id=${id}`);
+      const data = await res.json();
+      if (data && data.accounts && data.accounts.length > 0) {
+        const a = data.accounts[0];
+        setVal('gain-total', `+${a.gain}%`, 'green');
+        setVal('max-dd', `-${a.drawdown}%`, 'red');
+        setVal('win-rate', `${a.wonTrades && a.trades ? Math.round(a.wonTrades/a.trades*100) : '--'}%`);
+        setVal('profit-factor', a.profitFactor || '--');
+        setVal('total-trades', a.trades || '--');
+        setVal('started-date', a.firstTradeDate ? a.firstTradeDate.slice(0,10) : '--');
+        setVal('s-gain', `+${a.gain}%`, 'green');
+        setVal('s-dd', `-${a.drawdown}%`, 'red');
+        setVal('s-wr', `${a.wonTrades && a.trades ? Math.round(a.wonTrades/a.trades*100) : '--'}%`);
+        setVal('s-pf', a.profitFactor || '--');
+        setVal('s-trades', a.trades || '--');
+        setVal('s-lots', a.lots || '--');
+      }
+    } catch(e) {
+      console.log('MyFXBook API: usa widget embed per i dati.');
+    }
+  }
+
+  function setVal(id, val, cls) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = val;
+    if (cls) el.classList.add(cls);
+  }
+
+  /* ── PERSIST ID across sessions ── */
+  window.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('myfxbook_id');
+    if (saved) {
+      document.getElementById('myfxbook-id-input').value = saved;
+    }
+  });
+
+  const origActivate = window.activateEmbed;
+  window.activateEmbed = function() {
+    const id = document.getElementById('myfxbook-id-input').value.trim();
+    localStorage.setItem('myfxbook_id', id);
+    origActivate ? origActivate() : null;
+    // inline version
+    if (!id) { alert('Inserisci il tuo MyFXBook Account ID'); return; }
+    window._myfxbookId = id;
+    loadEmbed(id, 'growth');
+    document.getElementById('setup-card').style.display = 'none';
+    document.getElementById('embed-live').style.display = 'block';
+    document.getElementById('trades-placeholder').style.display = 'none';
+    document.getElementById('trades-table').style.display = 'table';
+    fetchStats(id);
+  };
+
+  // Auto-load if saved
+  window.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('myfxbook_id');
+    if (saved) {
+      window._myfxbookId = saved;
+      document.getElementById('myfxbook-id-input').value = saved;
+      loadEmbed(saved, 'growth');
+      document.getElementById('setup-card').style.display = 'none';
+      document.getElementById('embed-live').style.display = 'block';
+      fetchStats(saved);
+    }
+  });
+</script>
+</body>
+</html>
