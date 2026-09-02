@@ -600,29 +600,39 @@
     .nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
     @media (max-width: 900px) {
-      nav { padding: 16px 24px; }
+      nav { padding: 14px 20px; }
       .nav-links {
         display: none;
-        position: fixed;
-        top: 0; right: 0;
-        width: 70%;
-        max-width: 300px;
-        height: 100vh;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
         background: #0d0f13;
-        border-left: 1px solid rgba(201,168,76,0.15);
+        border-top: 1px solid rgba(201,168,76,0.3);
+        border-bottom: 1px solid rgba(201,168,76,0.3);
+        box-shadow: 0 24px 48px rgba(0,0,0,0.5);
         flex-direction: column;
         gap: 0;
-        padding: 90px 32px 32px;
+        padding: 8px 20px 14px;
         z-index: 150;
       }
       .nav-links.open { display: flex; }
-      .nav-links li { border-bottom: 1px solid rgba(201,168,76,0.1); }
-      .nav-links a { display: block; padding: 16px 0; font-size: 13px; }
+      .nav-links li { border-bottom: 1px solid rgba(201,168,76,0.14); }
+      .nav-links li:last-child { border-bottom: none; }
+      .nav-links a {
+        display: block;
+        padding: 17px 4px;
+        font-size: 15px;
+        letter-spacing: 0.04em;
+        text-transform: none;
+        color: var(--text);
+      }
+      .nav-links a:hover, .nav-links a:active { color: var(--gold); }
       .nav-burger { display: flex; }
       .nav-overlay {
         display: none;
         position: fixed; inset: 0;
-        background: rgba(0,0,0,0.6);
+        background: rgba(0,0,0,0.55);
         z-index: 140;
       }
       .nav-overlay.open { display: block; }
@@ -655,6 +665,7 @@
     <li><a href="#tiktok">TikTok</a></li>
     <li><a href="performance.html">Performance</a></li>
     <li><a href="ArmiAma_SwingHS_Wyckoff_XAUUSD.html">Guida XAUUSD</a></li>
+    <li><a href="https://armiamaforex.github.io/ArmiAma-Shop">Shop</a></li>
   </ul>
   <button class="nav-burger" id="navBurger" aria-label="Menu">
     <span></span><span></span><span></span>
