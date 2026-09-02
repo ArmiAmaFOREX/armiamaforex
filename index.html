@@ -578,9 +578,54 @@
     ::-webkit-scrollbar-thumb { background: var(--gold); }
 
     /* RESPONSIVE */
+    .nav-burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      z-index: 200;
+    }
+    .nav-burger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--gold);
+      transition: transform .25s, opacity .25s;
+    }
+    .nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
     @media (max-width: 900px) {
       nav { padding: 16px 24px; }
-      .nav-links { display: none; }
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 0; right: 0;
+        width: 70%;
+        max-width: 300px;
+        height: 100vh;
+        background: #0d0f13;
+        border-left: 1px solid rgba(201,168,76,0.15);
+        flex-direction: column;
+        gap: 0;
+        padding: 90px 32px 32px;
+        z-index: 150;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { border-bottom: 1px solid rgba(201,168,76,0.1); }
+      .nav-links a { display: block; padding: 16px 0; font-size: 13px; }
+      .nav-burger { display: flex; }
+      .nav-overlay {
+        display: none;
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,0.6);
+        z-index: 140;
+      }
+      .nav-overlay.open { display: block; }
       .hero { grid-template-columns: 1fr; padding: 60px 24px; min-height: auto; }
       .stats-row { grid-template-columns: 1fr; }
       .stat-block { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.15); padding: 36px; }
@@ -604,13 +649,36 @@
 <!-- NAV -->
 <nav>
   <div class="nav-logo">armi<span>ama</span>forex</div>
-  <ul class="nav-links">
+  <ul class="nav-links" id="navLinks">
     <li><a href="#about">Chi sono</a></li>
     <li><a href="#argomenti">Argomenti</a></li>
     <li><a href="#tiktok">TikTok</a></li>
+    <li><a href="performance.html">Performance</a></li>
+    <li><a href="ArmiAma_SwingHS_Wyckoff_XAUUSD.html">Guida XAUUSD</a></li>
   </ul>
+  <button class="nav-burger" id="navBurger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
   <a href="https://www.tiktok.com/@armiamaforex" target="_blank" class="nav-cta">Seguimi →</a>
 </nav>
+<div class="nav-overlay" id="navOverlay"></div>
+<script>
+  const navBurger = document.getElementById('navBurger');
+  const navLinks = document.getElementById('navLinks');
+  const navOverlay = document.getElementById('navOverlay');
+  function closeNav() {
+    navBurger.classList.remove('open');
+    navLinks.classList.remove('open');
+    navOverlay.classList.remove('open');
+  }
+  navBurger.addEventListener('click', () => {
+    navBurger.classList.toggle('open');
+    navLinks.classList.toggle('open');
+    navOverlay.classList.toggle('open');
+  });
+  navOverlay.addEventListener('click', closeNav);
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+</script>
 
 <!-- HERO -->
 <section class="hero" style="padding-top:80px; padding-bottom:80px;">
