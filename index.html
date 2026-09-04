@@ -134,6 +134,16 @@
       padding: 6px 0;
       z-index: 210;
     }
+    /* invisible bridge: keeps the li "hovered" while the cursor crosses
+       the visual gap between the button and the dropdown panel below it */
+    .has-submenu::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: -20px;
+      right: -20px;
+      height: 20px;
+    }
     .has-submenu:hover .chevron { transform: rotate(180deg); }
     .nav-submenu li a {
       display: block;
