@@ -95,6 +95,52 @@
       transition: color 0.3s;
     }
     .nav-links a:hover { color: var(--gold); }
+
+    /* SUBMENU (desktop: hover dropdown) */
+    .has-submenu { position: relative; }
+    .nav-sub-toggle {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.3s;
+    }
+    .nav-sub-toggle:hover, .has-submenu:hover .nav-sub-toggle { color: var(--gold); }
+    .chevron { font-size: 9px; transition: transform 0.25s; }
+    .nav-submenu {
+      display: none;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .has-submenu:hover .nav-submenu {
+      display: block;
+      position: absolute;
+      top: calc(100% + 16px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0d0f13;
+      border: 1px solid rgba(201,168,76,0.25);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.5);
+      min-width: 220px;
+      padding: 6px 0;
+      z-index: 210;
+    }
+    .has-submenu:hover .chevron { transform: rotate(180deg); }
+    .nav-submenu li a {
+      display: block;
+      padding: 12px 20px;
+      font-size: 10.5px;
+      white-space: nowrap;
+    }
     .nav-cta {
       background: var(--gold);
       color: #090b0e;
@@ -629,6 +675,36 @@
       }
       .nav-links a:hover, .nav-links a:active { color: var(--gold); }
       .nav-burger { display: flex; }
+
+      /* SUBMENU mobile: accordion via tap, not hover */
+      .has-submenu:hover .nav-submenu { display: none; }
+      .nav-sub-toggle {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 17px 4px;
+        font-size: 15px;
+        letter-spacing: 0.04em;
+        text-transform: none;
+        color: var(--text);
+      }
+      .has-submenu.open .nav-sub-toggle { color: var(--gold); }
+      .has-submenu.open .chevron { transform: rotate(180deg); }
+      .has-submenu .nav-submenu {
+        display: none;
+        flex-direction: column;
+        padding: 0 0 8px 16px;
+      }
+      .has-submenu.open .nav-submenu { display: flex; }
+      .nav-submenu li { border-bottom: none; }
+      .nav-submenu li a {
+        padding: 12px 4px;
+        font-size: 13.5px;
+        color: var(--muted);
+      }
+      .nav-submenu li a:hover, .nav-submenu li a:active { color: var(--gold); }
+
       .nav-overlay {
         display: none;
         position: fixed; inset: 0;
@@ -664,8 +740,13 @@
     <li><a href="#argomenti">Argomenti</a></li>
     <li><a href="#tiktok">TikTok</a></li>
     <li><a href="performance.html">Performance</a></li>
-    <li><a href="ArmiAma_SwingHS_Wyckoff_XAUUSD.html">Guida XAUUSD</a></li>
-    <li><a href="lucrino.html">Guida Lucrino</a></li>
+    <li class="has-submenu">
+      <button class="nav-sub-toggle" aria-expanded="false">Guide <span class="chevron">▾</span></button>
+      <ul class="nav-submenu">
+        <li><a href="lucrino.html">Lucrino</a></li>
+        <li><a href="ArmiAma_SwingHS_Wyckoff_XAUUSD.html">SwingHS Wyckoff (XAUUSD)</a></li>
+      </ul>
+    </li>
     <li><a href="accademy.html">Accademy</a></li>
     <li><a href="https://armiamaforex.github.io/ArmiAma-Shop">Shop</a></li>
   </ul>
@@ -683,6 +764,10 @@
     navBurger.classList.remove('open');
     navLinks.classList.remove('open');
     navOverlay.classList.remove('open');
+    navLinks.querySelectorAll('.has-submenu.open').forEach(li => {
+      li.classList.remove('open');
+      li.querySelector('.nav-sub-toggle').setAttribute('aria-expanded', 'false');
+    });
   }
   navBurger.addEventListener('click', () => {
     navBurger.classList.toggle('open');
@@ -691,6 +776,13 @@
   });
   navOverlay.addEventListener('click', closeNav);
   navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+  navLinks.querySelectorAll('.nav-sub-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const li = btn.closest('.has-submenu');
+      const isOpen = li.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  });
 </script>
 
 <!-- HERO -->
