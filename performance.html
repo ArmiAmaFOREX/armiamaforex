@@ -521,8 +521,8 @@
   <div class="hero-right">
     <div class="account-card">
       <div class="account-card-header">
-        <span class="label">Account Summary</span>
-        <span class="myfxbook-badge">● MyFXBook</span>
+        <span class="label">ArmiAma SwingHS Wyckoff</span>
+        <a href="https://www.myfxbook.com/members/ArmiAma/armiama-swinghs-wyckoff/12183288" target="_blank" class="myfxbook-badge">● MyFXBook</a>
       </div>
       <div class="account-metric">
         <div class="m-label">GAIN TOTALE</div>
@@ -604,40 +604,10 @@
 
     <div class="myfxbook-embed" id="embed-area">
 
-      <!-- ── SETUP CARD (visibile finché non hai l'ID MyFXBook) ── -->
-      <div class="setup-card" id="setup-card">
-        <div class="setup-icon">📊</div>
-        <h3>Connetti MyFXBook</h3>
-        <p>Per mostrare il grafico live del tuo conto reale, segui questi passaggi:</p>
-        <div class="setup-steps">
-          <div class="setup-step">
-            <span class="step-num">1</span>
-            <span class="step-text">Registrati su <strong>myfxbook.com</strong> e vai su <strong>Dashboard → Add Account</strong></span>
-          </div>
-          <div class="setup-step">
-            <span class="step-num">2</span>
-            <span class="step-text">Inserisci il numero conto MT5, la <strong>password investor</strong> (read-only) e il server XM</span>
-          </div>
-          <div class="setup-step">
-            <span class="step-num">3</span>
-            <span class="step-text">Una volta verificato ottieni il tuo <strong>Account ID</strong> (es. <code style="color:var(--accent)">123456</code>)</span>
-          </div>
-          <div class="setup-step">
-            <span class="step-num">4</span>
-            <span class="step-text">Inseriscilo nel campo qui sotto — il grafico si attiva automaticamente</span>
-          </div>
-        </div>
-        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;">
-          <input id="myfxbook-id-input" type="text" placeholder="Il tuo MyFXBook Account ID..."
-            style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:12px 16px;border-radius:8px;font-family:'Space Mono',monospace;font-size:13px;outline:none;width:240px;" />
-          <button onclick="activateEmbed()" style="background:var(--accent);color:var(--bg);padding:12px 20px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;">Attiva</button>
-        </div>
-        <a href="https://www.myfxbook.com" target="_blank" class="btn-myfxbook">
-          🔗 Apri MyFXBook
-        </a>
-      </div>
+      <!-- Setup card lasciata pronta (nascosta via JS) nel caso serva ricollegare/aggiungere un account in futuro -->
+      <div class="setup-card" id="setup-card" style="display:none;"></div>
 
-      <!-- ── LIVE EMBED (nascosto finché non si attiva) ── -->
+      <!-- ── LIVE EMBED ── -->
       <div class="embed-live" id="embed-live">
         <iframe id="myfxbook-iframe" src="" height="420" scrolling="no"></iframe>
       </div>
@@ -685,25 +655,13 @@
 </footer>
 
 <script>
+  const MYFXBOOK_ID = '12183288'; // ArmiAma SwingHS Wyckoff
+
   /* ── TAB SWITCH ── */
   function setTab(btn, type) {
     document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
-    const id = window._myfxbookId;
-    if (id) loadEmbed(id, type);
-  }
-
-  /* ── ACTIVATE EMBED ── */
-  function activateEmbed() {
-    const id = document.getElementById('myfxbook-id-input').value.trim();
-    if (!id) { alert('Inserisci il tuo MyFXBook Account ID'); return; }
-    window._myfxbookId = id;
-    loadEmbed(id, 'growth');
-    document.getElementById('setup-card').style.display = 'none';
-    document.getElementById('embed-live').style.display = 'block';
-    document.getElementById('trades-placeholder').style.display = 'none';
-    document.getElementById('trades-table').style.display = 'table';
-    fetchStats(id);
+    loadEmbed(MYFXBOOK_ID, type);
   }
 
   function loadEmbed(id, type) {
@@ -745,41 +703,14 @@
     if (cls) el.classList.add(cls);
   }
 
-  /* ── PERSIST ID across sessions ── */
+  /* ── ATTIVA SUBITO IL CONTO, NESSUN INPUT MANUALE ── */
   window.addEventListener('DOMContentLoaded', () => {
-    const saved = localStorage.getItem('myfxbook_id');
-    if (saved) {
-      document.getElementById('myfxbook-id-input').value = saved;
-    }
-  });
-
-  const origActivate = window.activateEmbed;
-  window.activateEmbed = function() {
-    const id = document.getElementById('myfxbook-id-input').value.trim();
-    localStorage.setItem('myfxbook_id', id);
-    origActivate ? origActivate() : null;
-    // inline version
-    if (!id) { alert('Inserisci il tuo MyFXBook Account ID'); return; }
-    window._myfxbookId = id;
-    loadEmbed(id, 'growth');
+    loadEmbed(MYFXBOOK_ID, 'growth');
     document.getElementById('setup-card').style.display = 'none';
     document.getElementById('embed-live').style.display = 'block';
     document.getElementById('trades-placeholder').style.display = 'none';
     document.getElementById('trades-table').style.display = 'table';
-    fetchStats(id);
-  };
-
-  // Auto-load if saved
-  window.addEventListener('DOMContentLoaded', () => {
-    const saved = localStorage.getItem('myfxbook_id');
-    if (saved) {
-      window._myfxbookId = saved;
-      document.getElementById('myfxbook-id-input').value = saved;
-      loadEmbed(saved, 'growth');
-      document.getElementById('setup-card').style.display = 'none';
-      document.getElementById('embed-live').style.display = 'block';
-      fetchStats(saved);
-    }
+    fetchStats(MYFXBOOK_ID);
   });
 </script>
 </body>
