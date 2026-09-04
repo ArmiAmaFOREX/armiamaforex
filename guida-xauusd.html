@@ -80,6 +80,10 @@
     }
     .has-submenu:hover .chevron { transform: rotate(180deg); }
     .nav-submenu li a { display: block; padding: 12px 20px; font-size: 10.5px; white-space: nowrap; }
+    .nav-submenu li span.current {
+      display: block; padding: 12px 20px; font-size: 10.5px; white-space: nowrap;
+      color: var(--gold); cursor: default;
+    }
     .nav-cta {
       background: var(--gold); color: #090b0e;
       font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
@@ -213,6 +217,7 @@
 
       /* SUBMENU mobile: accordion via tap, not hover */
       .has-submenu:hover .nav-submenu { display: none; }
+      .has-submenu::after { display: none; }
       .nav-sub-toggle {
         width: 100%; display: flex; align-items: center; justify-content: space-between;
         padding: 16px 0; font-size: 14px; letter-spacing: 0.02em; text-transform: none; color: var(--text);
@@ -224,6 +229,7 @@
       .nav-submenu li { border-bottom: none; }
       .nav-submenu li a { padding: 12px 0; font-size: 13px; color: var(--muted); }
       .nav-submenu li a:hover, .nav-submenu li a:active { color: var(--gold); }
+      .nav-submenu li span.current { padding: 12px 0; font-size: 13px; color: var(--gold); }
       .hero, section { padding-left: 20px; padding-right: 20px; }
       footer { padding: 24px 20px; flex-direction: column; }
     }
@@ -692,4 +698,3 @@
 
 </body>
 </html>
-
