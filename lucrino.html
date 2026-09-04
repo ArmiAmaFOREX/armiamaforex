@@ -54,6 +54,44 @@
   }
   nav ul li a:hover, nav ul li a.active{color:var(--gold-bright); border-bottom-color:var(--gold);}
 
+  /* ---- submenu (desktop: hover dropdown) ---- */
+  .has-submenu{position:relative;}
+  .nav-sub-toggle{
+    background:none; border:none; color:var(--ink-dim);
+    font-family:'DM Mono', monospace; font-size:13px;
+    cursor:pointer; padding:0; display:inline-flex; align-items:center; gap:6px;
+    border-bottom:1px solid transparent; padding-bottom:2px;
+  }
+  .nav-sub-toggle:hover, .has-submenu:hover .nav-sub-toggle{color:var(--gold-bright); border-bottom-color:var(--gold);}
+  .chevron{font-size:9px; transition:transform 0.25s;}
+  .nav-submenu{display:none; list-style:none; margin:0; padding:0;}
+  .has-submenu:hover .nav-submenu{
+    display:block; position:absolute; top:calc(100% + 16px); left:50%;
+    transform:translateX(-50%);
+    background:var(--bg-panel); border:1px solid var(--line);
+    box-shadow:0 16px 32px rgba(0,0,0,0.5);
+    min-width:200px; padding:6px 0; z-index:60;
+  }
+  .has-submenu::after{
+    content:""; position:absolute; top:100%; left:-20px; right:-20px; height:20px;
+  }
+  .has-submenu:hover .chevron{transform:rotate(180deg);}
+  .nav-submenu li a{
+    display:block; padding:12px 18px; font-size:12.5px; white-space:nowrap; border-bottom:none;
+  }
+
+  /* ---- nav burger (mobile) ---- */
+  .nav-burger{
+    display:none; flex-direction:column; gap:5px; background:none; border:none;
+    cursor:pointer; padding:6px; z-index:60;
+  }
+  .nav-burger span{display:block; width:24px; height:2px; background:var(--gold-bright); transition:transform .25s, opacity .25s;}
+  .nav-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-burger.open span:nth-child(2){opacity:0;}
+  .nav-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .nav-overlay{display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:45;}
+  .nav-overlay.open{display:block;}
+
   /* ---- ticker ---- */
   .ticker-wrap{
     overflow:hidden; white-space:nowrap; border-bottom:1px solid var(--line);
@@ -150,7 +188,38 @@
   footer .disclaimer{ border-top:1px solid var(--line); padding-top:22px; line-height:1.7; }
 
   @media (max-width:640px){
-    nav ul{ display:none; }
+    nav ul{
+      display:none;
+      position:absolute;
+      top:100%; left:0; right:0;
+      background:var(--bg-panel);
+      border-top:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+      box-shadow:0 24px 48px rgba(0,0,0,0.5);
+      flex-direction:column;
+      gap:0;
+      padding:8px 20px 14px;
+      z-index:55;
+    }
+    nav ul.open{ display:flex; }
+    nav ul li{ border-bottom:1px solid var(--line); }
+    nav ul li:last-child{ border-bottom:none; }
+    nav ul li a{
+      display:block; padding:17px 4px; font-size:15px;
+      letter-spacing:0.02em; color:var(--ink); border-bottom:none;
+    }
+    .nav-burger{ display:flex; }
+    .has-submenu:hover .nav-submenu{ display:none; }
+    .nav-sub-toggle{
+      width:100%; display:flex; align-items:center; justify-content:space-between;
+      padding:17px 4px; font-size:15px; color:var(--ink);
+    }
+    .has-submenu.open .nav-sub-toggle{ color:var(--gold-bright); }
+    .has-submenu.open .chevron{ transform:rotate(180deg); }
+    .has-submenu .nav-submenu{ display:none; flex-direction:column; padding:0 0 8px 16px; }
+    .has-submenu.open .nav-submenu{ display:flex; }
+    .nav-submenu li{ border-bottom:none; }
+    .nav-submenu li a{ padding:12px 4px; font-size:13.5px; color:var(--ink-dim); }
     .kicker{ flex-wrap:wrap; }
     .kicker .tag{ margin-left:0; order:3; }
   }
@@ -159,14 +228,25 @@
 <body>
 
 <nav>
-  <div class="brand">ARMIAMA <span>FOREX</span></div>
-  <ul>
+  <a href="index.html" class="brand" style="text-decoration:none;">ARMIAMA <span>FOREX</span></a>
+  <ul id="navLinks">
     <li><a href="index.html">Home</a></li>
     <li><a href="performance.html">Performance</a></li>
-    <li><a href="guida-xauusd.html">Guida XAUUSD</a></li>
-    <li><a href="lucrino.html" class="active">Lucrino</a></li>
+    <li class="has-submenu">
+      <button class="nav-sub-toggle" aria-expanded="false">Guide <span class="chevron">▾</span></button>
+      <ul class="nav-submenu">
+        <li><a href="lucrino.html" class="active">Lucrino</a></li>
+        <li><a href="guida-xauusd.html">Wyckoff XAUUSD</a></li>
+      </ul>
+    </li>
+    <li><a href="accademy.html">Accademy</a></li>
+    <li><a href="https://armiamaforex.github.io/ArmiAma-Shop">Shop</a></li>
   </ul>
+  <button class="nav-burger" id="navBurger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="nav-overlay" id="navOverlay"></div>
 
 <div class="ticker-wrap">
   <div class="ticker">
@@ -347,6 +427,35 @@
     ArmiAma Forex non fornisce consulenza finanziaria.
   </div>
 </footer>
+
+<script>
+  const navBurger = document.getElementById('navBurger');
+  const navLinks = document.getElementById('navLinks');
+  const navOverlay = document.getElementById('navOverlay');
+  function closeNav() {
+    navBurger.classList.remove('open');
+    navLinks.classList.remove('open');
+    navOverlay.classList.remove('open');
+    navLinks.querySelectorAll('.has-submenu.open').forEach(li => {
+      li.classList.remove('open');
+      li.querySelector('.nav-sub-toggle').setAttribute('aria-expanded', 'false');
+    });
+  }
+  navBurger.addEventListener('click', () => {
+    navBurger.classList.toggle('open');
+    navLinks.classList.toggle('open');
+    navOverlay.classList.toggle('open');
+  });
+  navOverlay.addEventListener('click', closeNav);
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+  navLinks.querySelectorAll('.nav-sub-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const li = btn.closest('.has-submenu');
+      const isOpen = li.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  });
+</script>
 
 </body>
 </html>
