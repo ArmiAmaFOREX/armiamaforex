@@ -203,7 +203,7 @@
 
     .nav-burger {
       display: none; flex-direction: column; gap: 5px;
-      background: none; border: none; cursor: pointer; padding: 6px; z-index: 200;
+      background: none; border: none; cursor: pointer; padding: 6px; z-index: 60;
     }
     .nav-burger span { display: block; width: 24px; height: 2px; background: var(--gold); transition: transform .25s, opacity .25s; }
     .nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
@@ -214,15 +214,15 @@
       nav { padding: 16px 20px; }
       .nav-links {
         display: none;
-        position: fixed;
-        top: 57px; left: 0; right: 0;
+        position: absolute;
+        top: 100%; left: 0; right: 0;
         background: #0d0f13;
         border-top: 1px solid var(--border);
         border-bottom: 1px solid var(--border);
         box-shadow: 0 24px 48px rgba(0,0,0,0.5);
         flex-direction: column; gap: 0;
         padding: 8px 20px 14px;
-        z-index: 9999;
+        z-index: 55;
       }
       .nav-links.open { display: flex; }
       .nav-links li { border-bottom: 1px solid var(--border); }
@@ -234,7 +234,7 @@
       .nav-links a:hover, .nav-links a:active { color: var(--gold); }
       .nav-burger { display: flex; }
       .nav-cta { display: none; }
-      .nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 9998; }
+      .nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 45; }
       .nav-overlay.open { display: block; }
 
       /* SUBMENU mobile: accordion via tap, not hover */
@@ -341,12 +341,7 @@
     navOverlay.classList.toggle('open');
   });
   navOverlay.addEventListener('click', closeNav);
-  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', function(e){
-    // su link reali (non submenu toggle) chiudi dopo un tick per permettere la navigazione
-    if(!this.closest('.has-submenu') || this.tagName === 'A') {
-      setTimeout(closeNav, 10);
-    }
-  }));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
   navLinks.querySelectorAll('.nav-sub-toggle').forEach(btn => {
     btn.addEventListener('click', () => {
       const li = btn.closest('.has-submenu');
