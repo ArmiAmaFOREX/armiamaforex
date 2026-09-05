@@ -524,10 +524,11 @@
         <span class="label">ArmiAma SwingHS Wyckoff</span>
         <a href="https://www.myfxbook.com/members/ArmiAma/armiama-swinghs-wyckoff/12183288" target="_blank" class="myfxbook-badge">● MyFXBook</a>
       </div>
-      <a href="https://www.myfxbook.com/members/ArmiAma/armiama-swinghs-wyckoff/12183288" target="_blank" style="display:block;">
+      <a href="https://www.myfxbook.com/members/ArmiAma/armiama-swinghs-wyckoff/12183288" target="_blank"
+         style="display:block; background:#f4f2ee; padding:10px; border-radius:8px; border:1px solid var(--gold);">
         <img alt="ArmiAma SwingHS Wyckoff — statistiche live MyFXBook"
              src="https://widget.mfbcdn.net/widget/widget.png?accountOid=12183288&type=6"
-             style="width:100%;height:auto;border-radius:6px;display:block;" />
+             style="width:100%;height:auto;border-radius:4px;display:block;" />
       </a>
     </div>
   </div>
@@ -536,38 +537,12 @@
 <!-- STATS GRID -->
 <section class="stats-section">
   <div class="section-title">Statistiche dettagliate</div>
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="s-label">Gain %</div>
-      <div class="s-val green" id="s-gain">+--.--%</div>
-      <div class="s-sub">dalla apertura conto</div>
-    </div>
-    <div class="stat-card">
-      <div class="s-label">Drawdown Max</div>
-      <div class="s-val red" id="s-dd">--.-- %</div>
-      <div class="s-sub">massimo drawdown storico</div>
-    </div>
-    <div class="stat-card">
-      <div class="s-label">Win Rate</div>
-      <div class="s-val green" id="s-wr">-- %</div>
-      <div class="s-sub">trade vincenti / totali</div>
-    </div>
-    <div class="stat-card">
-      <div class="s-label">Profit Factor</div>
-      <div class="s-val green" id="s-pf">-.-</div>
-      <div class="s-sub">gross profit / gross loss</div>
-    </div>
-    <div class="stat-card">
-      <div class="s-label">Trades Totali</div>
-      <div class="s-val" id="s-trades">---</div>
-      <div class="s-sub">trades eseguiti</div>
-    </div>
-    <div class="stat-card">
-      <div class="s-label">Lotti Totali</div>
-      <div class="s-val" id="s-lots">--.--</div>
-      <div class="s-sub">volume complessivo</div>
-    </div>
-  </div>
+  <a href="https://www.myfxbook.com/members/ArmiAma/armiama-swinghs-wyckoff/12183288" target="_blank"
+     style="display:block;max-width:700px;margin:0 auto;background:#f4f2ee;padding:14px;border-radius:10px;border:1px solid var(--gold);">
+    <img alt="ArmiAma SwingHS Wyckoff — statistiche dettagliate MyFXBook"
+         src="https://widget.mfbcdn.net/widget/widget.png?accountOid=12183288&type=4"
+         style="width:100%;height:auto;border-radius:6px;display:block;" />
+  </a>
 </section>
 
 <!-- EQUITY CHART (MyFXBook embed) -->
@@ -649,39 +624,6 @@
     iframe.src = `https://widgets.myfxbook.com/api/get-widget.php?id=${id}&type=${type === 'balance' ? 2 : 1}&width=900&height=400&bg=080c10&title=0`;
   }
 
-  /* ── FETCH STATS VIA MYFXBOOK API ── */
-  async function fetchStats(id) {
-    try {
-      // MyFXBook public API — no auth needed for public accounts
-      const res = await fetch(`https://www.myfxbook.com/api/get-my-accounts.json?id=${id}`);
-      const data = await res.json();
-      if (data && data.accounts && data.accounts.length > 0) {
-        const a = data.accounts[0];
-        setVal('gain-total', `+${a.gain}%`, 'green');
-        setVal('max-dd', `-${a.drawdown}%`, 'red');
-        setVal('win-rate', `${a.wonTrades && a.trades ? Math.round(a.wonTrades/a.trades*100) : '--'}%`);
-        setVal('profit-factor', a.profitFactor || '--');
-        setVal('total-trades', a.trades || '--');
-        setVal('started-date', a.firstTradeDate ? a.firstTradeDate.slice(0,10) : '--');
-        setVal('s-gain', `+${a.gain}%`, 'green');
-        setVal('s-dd', `-${a.drawdown}%`, 'red');
-        setVal('s-wr', `${a.wonTrades && a.trades ? Math.round(a.wonTrades/a.trades*100) : '--'}%`);
-        setVal('s-pf', a.profitFactor || '--');
-        setVal('s-trades', a.trades || '--');
-        setVal('s-lots', a.lots || '--');
-      }
-    } catch(e) {
-      console.log('MyFXBook API: usa widget embed per i dati.');
-    }
-  }
-
-  function setVal(id, val, cls) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.textContent = val;
-    if (cls) el.classList.add(cls);
-  }
-
   /* ── ATTIVA SUBITO IL CONTO, NESSUN INPUT MANUALE ── */
   window.addEventListener('DOMContentLoaded', () => {
     loadEmbed(MYFXBOOK_ID, 'growth');
@@ -689,7 +631,6 @@
     document.getElementById('embed-live').style.display = 'block';
     document.getElementById('trades-placeholder').style.display = 'none';
     document.getElementById('trades-table').style.display = 'table';
-    fetchStats(MYFXBOOK_ID);
   });
 </script>
 </body>
