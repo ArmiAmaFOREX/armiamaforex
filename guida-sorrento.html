@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SORRENTO — Sistema di trading a tre motori per XAUUSD</title>
+<title>EA Sorrento | Sistema di Trading a Tre Motori per XAUUSD</title>
+<meta name="description" content="Guida all'Expert Advisor Sorrento: tre motori di trading combinati per l'analisi di liquidità e volume su XAUUSD, sviluppato da ArmiAma Forex.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -40,13 +41,60 @@
   .wrap{ max-width:760px; margin:0 auto; padding:0 28px; }
   a{ color:var(--gold-light); }
 
-  /* ---------- Top mark ---------- */
-  .brand{
-    padding:28px 0 0;
+  /* ---------- Nav ---------- */
+  nav.site-nav{
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(20,19,15,0.92); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--line);
   }
-  .brand .wrap{ display:flex; align-items:baseline; justify-content:space-between; }
-  .brand-name{ font-family:'Fraunces', serif; font-size:1.05rem; color:var(--gold-light); }
-  .brand-tag{ font-size:0.78rem; color:var(--text-dim); }
+  nav.site-nav .wrap{
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 0;
+  }
+  .nav-logo{ font-family:'Fraunces', serif; font-size:1.05rem; color:var(--gold-light); text-decoration:none; }
+  .nav-logo span{ color: var(--text-dim); }
+  .nav-links{ display:flex; align-items:center; gap:28px; list-style:none; }
+  .nav-links a{
+    font-family:'IBM Plex Mono', monospace; color:var(--text-dim); text-decoration:none;
+    font-size:11px; letter-spacing:0.14em; text-transform:uppercase; transition:color .3s;
+  }
+  .nav-links a:hover, .nav-links a.active{ color:var(--gold); }
+  .has-submenu{ position:relative; }
+  .nav-sub-toggle{
+    background:none; border:none; color:var(--text-dim); font-family:'IBM Plex Mono', monospace;
+    font-size:11px; letter-spacing:0.14em; text-transform:uppercase; cursor:pointer; padding:0;
+    display:inline-flex; align-items:center; gap:6px; transition:color .3s;
+  }
+  .nav-sub-toggle:hover, .has-submenu:hover .nav-sub-toggle{ color:var(--gold); }
+  .nav-submenu{ display:none; list-style:none; margin:0; padding:0; }
+  .has-submenu:hover .nav-submenu{
+    display:block; position:absolute; top:calc(100% + 16px); left:50%; transform:translateX(-50%);
+    background:var(--panel); border:1px solid var(--line); box-shadow:0 16px 32px rgba(0,0,0,0.5);
+    min-width:200px; padding:6px 0; z-index:210;
+  }
+  .has-submenu::after{ content:""; position:absolute; top:100%; left:-20px; right:-20px; height:20px; }
+  .nav-submenu li a{ display:block; padding:12px 18px; font-size:10.5px; white-space:nowrap; }
+  .nav-cta{
+    background:var(--gold); color:#171410; font-size:11px; font-weight:600; letter-spacing:0.1em;
+    text-transform:uppercase; padding:9px 18px; text-decoration:none; transition:background .25s;
+  }
+  .nav-cta:hover{ background:var(--gold-light); }
+  .nav-burger{
+    display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:6px;
+  }
+  .nav-burger span{ display:block; width:22px; height:2px; background:var(--gold); }
+  @media (max-width: 768px){
+    .nav-links{
+      display:none; position:absolute; top:100%; left:0; right:0;
+      background:var(--panel); border-bottom:1px solid var(--line);
+      flex-direction:column; align-items:flex-start; gap:0; padding:8px 20px 14px; z-index:55;
+    }
+    .nav-links.open{ display:flex; }
+    .nav-links li{ width:100%; padding:10px 0; border-bottom:1px solid var(--line); }
+    .nav-links li:last-child{ border-bottom:none; }
+    .has-submenu:hover .nav-submenu{ position:static; transform:none; box-shadow:none; border:none; background:none; padding-left:12px; }
+    .nav-burger{ display:flex; }
+  }
 
   /* ---------- Hero ---------- */
   .hero{
@@ -232,12 +280,38 @@
 </head>
 <body>
 
-  <div class="brand">
+  <nav class="site-nav">
     <div class="wrap">
-      <span class="brand-name">ArmiAma Forex</span>
-      <span class="brand-tag">Sistemi automatici per XAUUSD</span>
+      <a href="index.html" class="nav-logo">armi<span>ama</span>forex</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#about">Chi sono</a></li>
+        <li><a href="index.html#argomenti">Argomenti</a></li>
+        <li><a href="index.html#tiktok">TikTok</a></li>
+        <li><a href="performance.html">Performance</a></li>
+        <li class="has-submenu">
+          <button class="nav-sub-toggle" aria-expanded="false">Guide ▾</button>
+          <ul class="nav-submenu">
+            <li><a href="lucrino.html">Lucrino</a></li>
+            <li><a href="guida-sorrento.html" class="active">Sorrento</a></li>
+            <li><a href="guida-xauusd.html">Wyckoff XAUUSD</a></li>
+            <li><a href="guida-eurusd.html">Wyckoff EURUSD</a></li>
+          </ul>
+        </li>
+        <li><a href="accademy.html">Accademy</a></li>
+        <li><a href="https://armiamaforex.github.io/ArmiAma-Shop">Shop</a></li>
+      </ul>
+      <button class="nav-burger" id="navBurger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="https://www.tiktok.com/@armiamaforex" target="_blank" class="nav-cta">Seguimi →</a>
     </div>
-  </div>
+  </nav>
+  <script>
+    document.getElementById('navBurger').addEventListener('click', function(){
+      this.classList.toggle('open');
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+  </script>
 
   <header class="hero">
     <div class="hero-bg"></div>
