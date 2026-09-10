@@ -88,7 +88,7 @@
       list-style: none;
     }
     .nav-links a {
-      color: var(--muted);
+      color: var(--text);
       text-decoration: none;
       font-size: 11px;
       letter-spacing: 0.2em;
@@ -102,7 +102,7 @@
     .nav-sub-toggle {
       background: none;
       border: none;
-      color: var(--muted);
+      color: var(--text);
       font-family: 'DM Mono', monospace;
       font-size: 11px;
       letter-spacing: 0.2em;
@@ -907,20 +907,10 @@
   </div>
 </section>
 
-<!-- STATS -->
-<div class="stats-row">
-  <div class="stat-block">
-    <div class="stat-num" id="cnt-followers">0</div>
-    <div class="stat-label">Follower TikTok</div>
-  </div>
-  <div class="stat-block">
-    <div class="stat-num" id="cnt-videos">0</div>
-    <div class="stat-label">Video pubblicati</div>
-  </div>
-  <div class="stat-block">
-    <div class="stat-num" id="cnt-views">0</div>
-    <div class="stat-label">Visualizzazioni totali</div>
-  </div>
+<!-- TRUST BANNER -->
+<div class="stats-row" style="display:flex; align-items:center; justify-content:center; gap:20px; flex-wrap:wrap; text-align:center; padding:32px 24px;">
+  <span style="font-family:'Bebas Neue',sans-serif; font-size:clamp(20px,3vw,28px); letter-spacing:0.03em; color:var(--text,#fff);">Risultati pubblici e verificabili su MyFXBook</span>
+  <a href="performance.html" style="display:inline-flex; align-items:center; gap:8px; background:#c9a84c; color:#090b0e; font-family:'DM Mono',monospace; font-size:12px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; padding:12px 24px; text-decoration:none; transition:background .25s;">Guarda i risultati live →</a>
 </div>
 
 <!-- ABOUT -->
@@ -1050,37 +1040,6 @@
 </footer>
 
 <script>
-  // Counter animation
-  function animateCount(id, target, suffix, duration) {
-    const el = document.getElementById(id);
-    let start = 0;
-    const step = target / (duration / 16);
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= target) {
-        el.textContent = target.toLocaleString('it-IT') + suffix;
-        clearInterval(timer);
-      } else {
-        el.textContent = Math.floor(start).toLocaleString('it-IT') + suffix;
-      }
-    }, 16);
-  }
-
-  // Trigger when stats section is visible
-  const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        animateCount('cnt-followers', 10000, '+', 1800);
-        animateCount('cnt-videos', 150, '+', 1400);
-        animateCount('cnt-views', 500000, '+', 2200);
-        statsObserver.disconnect();
-      }
-    });
-  }, { threshold: 0.3 });
-
-  const statsEl = document.querySelector('.stats-row');
-  if (statsEl) statsObserver.observe(statsEl);
-
   // Video card click
   document.querySelector('.video-card').addEventListener('click', () => {
     window.open('https://www.tiktok.com/@armiamaforex', '_blank');
