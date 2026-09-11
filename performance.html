@@ -381,38 +381,6 @@
       color: var(--text);
     }
 
-    /* STATS ROW */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      border-top: 1px solid rgba(201,168,76,0.15);
-      border-bottom: 1px solid rgba(201,168,76,0.15);
-    }
-    .stat-block {
-      padding: 48px;
-      text-align: center;
-      border-right: 1px solid rgba(201,168,76,0.15);
-      position: relative;
-      overflow: hidden;
-      transition: background 0.3s;
-    }
-    .stat-block:last-child { border-right: none; }
-    .stat-block:hover { background: var(--gold-dim); }
-    .stat-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 64px;
-      color: var(--gold);
-      line-height: 1;
-      letter-spacing: 0.02em;
-    }
-    .stat-label {
-      font-size: 10px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-top: 8px;
-    }
-
     /* SECTION */
     section { padding: 100px 48px; }
     .section-label {
@@ -734,7 +702,6 @@
       }
       .nav-overlay.open { display: block; }
       .hero { grid-template-columns: 1fr; padding: 60px 24px; min-height: auto; }
-      .stats-row { grid-template-columns: 1fr; }
       .stat-block { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.15); padding: 36px; }
       section { padding: 72px 24px; }
       .content-grid { grid-template-columns: 1fr; gap: 40px; }
@@ -902,22 +869,6 @@
     </div>
   </div>
 </section>
-
-<!-- STATS -->
-<div class="stats-row">
-  <div class="stat-block">
-    <div class="stat-num" id="cnt-followers">0</div>
-    <div class="stat-label">Follower TikTok</div>
-  </div>
-  <div class="stat-block">
-    <div class="stat-num" id="cnt-videos">0</div>
-    <div class="stat-label">Video pubblicati</div>
-  </div>
-  <div class="stat-block">
-    <div class="stat-num" id="cnt-views">0</div>
-    <div class="stat-label">Visualizzazioni totali</div>
-  </div>
-</div>
 
 <!-- MYFXBOOK -->
 <section id="myfxbook" class="content-section" style="background:var(--bg2,#0d0f13); border-bottom:1px solid rgba(201,168,76,0.15); padding:72px 48px;">
@@ -1151,37 +1102,6 @@
 </footer>
 
 <script>
-  // Counter animation
-  function animateCount(id, target, suffix, duration) {
-    const el = document.getElementById(id);
-    let start = 0;
-    const step = target / (duration / 16);
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= target) {
-        el.textContent = target.toLocaleString('it-IT') + suffix;
-        clearInterval(timer);
-      } else {
-        el.textContent = Math.floor(start).toLocaleString('it-IT') + suffix;
-      }
-    }, 16);
-  }
-
-  // Trigger when stats section is visible
-  const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        animateCount('cnt-followers', 10000, '+', 1800);
-        animateCount('cnt-videos', 150, '+', 1400);
-        animateCount('cnt-views', 500000, '+', 2200);
-        statsObserver.disconnect();
-      }
-    });
-  }, { threshold: 0.3 });
-
-  const statsEl = document.querySelector('.stats-row');
-  if (statsEl) statsObserver.observe(statsEl);
-
   // Video card click
   document.querySelector('.video-card').addEventListener('click', () => {
     window.open('https://www.tiktok.com/@armiamaforex', '_blank');
