@@ -373,6 +373,22 @@
       .shop-banner-close { right:10px; }
       body.has-shop-banner { padding-bottom: 78px; }
     }
+  
+    /* ===== COPYTRADE: voce di menu ===== */
+    .nav-links a.nav-featured { color: var(--gold); }
+    .nav-links a.nav-featured::before {
+      content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); margin-right: 8px; vertical-align: middle;
+      animation: ct-pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes ct-pulse { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+    @media (min-width: 901px) and (max-width: 1220px) {
+      nav { padding-left: 24px; padding-right: 24px; }
+      .nav-links { gap: 15px; }
+      .nav-links a, .nav-sub-toggle { letter-spacing: .1em; }
+      .nav-cta { padding-left: 14px; padding-right: 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .nav-links a.nav-featured::before { animation: none; } }
   </style>
 </head>
 <body>
@@ -400,6 +416,7 @@
       </ul>
     </li>
     <li><a href="accademy.html" class="active">Accademy</a></li>
+    <li><a href="copytrade.html" class="nav-featured">FOREX Strategies</a></li>
     <li><a href="https://armiamaforex.github.io/ArmiAma-Shop">Shop</a></li>
   </ul>
   <button class="nav-burger" id="navBurger" aria-label="Menu">
