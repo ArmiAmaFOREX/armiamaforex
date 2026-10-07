@@ -778,6 +778,45 @@
       .shop-banner-close { right:10px; }
       body.has-shop-banner { padding-bottom: 78px; }
     }
+  
+    /* ===== COPYTRADE: voce di menu ===== */
+    .nav-links a.nav-featured { color: var(--gold); }
+    .nav-links a.nav-featured::before {
+      content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); margin-right: 8px; vertical-align: middle;
+      animation: ct-pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes ct-pulse { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+    @media (min-width: 901px) and (max-width: 1220px) {
+      nav { padding-left: 24px; padding-right: 24px; }
+      .nav-links { gap: 15px; }
+      .nav-links a, .nav-sub-toggle { letter-spacing: .1em; }
+      .nav-cta { padding-left: 14px; padding-right: 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .nav-links a.nav-featured::before { animation: none; } }
+  
+    /* ===== ARMIAMA FOREX STRATEGIES + FOREX CLUB: blocco in evidenza in home ===== */
+    .ct-feature { padding: 64px 48px; background: var(--bg2); border-top: 1px solid rgba(201,168,76,.2); border-bottom: 1px solid rgba(201,168,76,.2); }
+    .ct-feature-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; align-items: stretch; }
+    .ct-card { padding: 36px; border: 1px solid rgba(201,168,76,.25); background: var(--bg); display: flex; flex-direction: column; align-items: flex-start; }
+    .ct-card-club { border-color: var(--gold); background: linear-gradient(135deg, rgba(212,160,23,.16), var(--bg) 72%); }
+    .ct-card .section-title { max-width: none; margin-bottom: 16px; }
+    .ct-club-title { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: clamp(30px, 3.2vw, 42px); line-height: 1.15; color: var(--text); margin: 0 0 16px; }
+    .ct-club-title, .ct-card .section-title { text-wrap: balance; }
+    .ct-club-list { list-style: none; margin: 0 0 28px; padding: 0; width: 100%; }
+    .ct-club-list li { position: relative; padding: 10px 0 10px 20px; border-top: 1px solid rgba(201,168,76,.2); color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .ct-club-list li::before { content: ''; position: absolute; left: 0; top: 19px; width: 8px; height: 8px; background: var(--gold); }
+    .ct-feature-text { color: var(--muted); font-size: 14px; line-height: 1.85; max-width: 58ch; margin: 0 0 24px; }
+    .ct-feature-facts { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; margin: 0 0 28px; border: 1px solid rgba(201,168,76,.2); background: var(--bg2); }
+    .ct-feature-facts div { padding: 16px 16px; border-left: 1px solid rgba(201,168,76,.2); }
+    .ct-feature-facts div:first-child { border-left: 0; }
+    .ct-feature-facts dt { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .ct-feature-facts dd { margin: 0; font: 400 28px/1.05 'Bebas Neue', sans-serif; letter-spacing: .04em; color: var(--gold-light); }
+    .ct-feature-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: auto; }
+    .ct-feature-note { max-width: 1200px; margin: 28px auto 0; font-size: 11px; line-height: 1.7; color: var(--muted); }
+    .hero-actions { flex-wrap: wrap; }
+    @media (max-width: 900px) { .ct-feature { padding: 44px 24px; } .ct-feature-grid { grid-template-columns: 1fr; } .ct-card { padding: 26px; } }
+    @media (max-width: 520px) { .ct-feature-facts { grid-template-columns: 1fr; } .ct-feature-facts div { border-left: 0; border-top: 1px solid rgba(201,168,76,.2); } .ct-feature-facts div:first-child { border-top: 0; } }
   </style>
 </head>
 <body>
@@ -807,6 +846,7 @@
       </ul>
     </li>
     <li><a href="accademy.html">Accademy</a></li>
+    <li><a href="copytrade.html" class="nav-featured">FOREX Strategies</a></li>
     <li><a href="https://armiamaforex.github.io/ArmiAma-Shop">Shop</a></li>
   </ul>
   <button class="nav-burger" id="navBurger" aria-label="Menu">
@@ -859,7 +899,8 @@
       spiegati in modo chiaro e diretto. Niente fuffa, solo contenuti reali.
     </p>
     <div class="hero-actions">
-      <a href="https://www.tiktok.com/@armiamaforex" target="_blank" class="btn-primary">Vai al TikTok</a>
+      <a href="copytrade.html" class="btn-primary">ArmiAma FOREX Strategies</a>
+      <a href="https://www.tiktok.com/@armiamaforex" target="_blank" class="btn-ghost">Vai al TikTok</a>
       <a href="https://armiamaforex.github.io/ArmiAma-Shop/#vip" class="btn-ghost">Forex Club →</a>
     </div>
   </div>
@@ -905,6 +946,39 @@
       </div>
     </div>
   </div>
+</section>
+
+<!-- ARMIAMA FOREX STRATEGIES + FOREX CLUB (in evidenza) -->
+<section class="ct-feature" aria-label="In evidenza">
+  <div class="ct-feature-grid">
+    <article class="ct-card ct-card-main">
+      <div class="section-label">Nuovo · Copy trading regolamentato</div>
+      <h2 class="section-title" id="ctFeatTitle">ArmiAma FOREX Strategies</h2>
+      <p class="ct-feature-text">Copia la strategia sul tuo conto FP Markets: i trade vengono replicati dal social trading del broker, regolamentato MiFID II. I tuoi fondi restano sul tuo conto personale e puoi sospendere o revocare la copia quando vuoi.</p>
+      <dl class="ct-feature-facts">
+        <div><dt>Costi fissi</dt><dd>Nessuno</dd></div>
+        <div><dt>Performance fee</dt><dd>30%</dd></div>
+        <div><dt>Uscita</dt><dd>Senza penali</dd></div>
+      </dl>
+      <div class="ct-feature-actions">
+        <a href="copytrade.html" class="btn-primary">Scopri ArmiAma FOREX Strategies</a>
+        <a href="copytrade.html#attivazione" class="btn-ghost">Come attivare la copia</a>
+      </div>
+    </article>
+    <article class="ct-card ct-card-club">
+      <div class="section-label">Forex Club</div>
+      <h3 class="ct-club-title">Tutti gli EA MT5, a vita.</h3>
+      <p class="ct-feature-text">Accesso a vita a tutti gli EA ArmiAma Forex, presenti e futuri, senza pagarli singolarmente.</p>
+      <ul class="ct-club-list">
+        <li>EA MT5 ArmiAma Forex, attuali e futuri</li>
+        <li>Con Forex Club Plus anche indicatori TradingView e codici sorgente MQL5</li>
+      </ul>
+      <div class="ct-feature-actions">
+        <a href="https://armiamaforex.github.io/ArmiAma-Shop/#vip" class="btn-primary">Scopri il Forex Club →</a>
+      </div>
+    </article>
+  </div>
+  <p class="ct-feature-note">I CFD sono strumenti complessi e comportano un rischio elevato di perdere rapidamente denaro a causa della leva finanziaria. Le performance passate non garantiscono risultati futuri. Contenuto a scopo didattico, non è consulenza finanziaria.</p>
 </section>
 
 <!-- TRUST BANNER -->
